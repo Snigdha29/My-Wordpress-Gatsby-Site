@@ -15,10 +15,6 @@ import Layout from "../components/layout"
 import Seo from "../components/seo"
 
 const BlogPostTemplate = ({ data: { previous, next, post } }) => {
-  // const featuredImage = {
-  //   data: post.featuredImage?.node?.localFile?.childImageSharp?.gatsbyImageData,
-  //   alt: post.featuredImage?.node?.alt || ``,
-  // }
 
   return (
     <Layout>
@@ -33,15 +29,6 @@ const BlogPostTemplate = ({ data: { previous, next, post } }) => {
           <h1 itemProp="headline">{parse(post.title)}</h1>
 
           <p>{post.date}</p>
-
-          {/* if we have a featured image for this post let's display it
-          {featuredImage?.data && (
-            <GatsbyImage
-              image={featuredImage.data}
-              alt={featuredImage.alt}
-              style={{ marginBottom: 50 }}
-            />
-          )} */}
         </header>
 
         {!!post.content && (
@@ -100,19 +87,6 @@ export const pageQuery = graphql`
       content
       title
       date(formatString: "MMMM DD, YYYY")
-      featuredImage {
-        node {
-          altText
-          localFile {
-            childImageSharp {
-              gatsbyImageData(
-                quality: 100
-                placeholder: TRACED_SVG
-                layout: FULL_WIDTH
-              )
-            }
-          }
-        }
       }
     }
     previous: wpPost(id: { eq: $previousPostId }) {
