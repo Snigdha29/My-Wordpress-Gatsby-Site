@@ -1,6 +1,7 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
 import parse from "html-react-parser"
+import { GatsbyImage } from "gatsby-plugin-image"
 
 import Bio from "../components/bio"
 import Layout from "../components/layout"
@@ -34,6 +35,10 @@ const BlogIndex = ({
       <ol style={{ listStyle: `none` }}>
         {posts.map(post => {
           const title = post.title
+          const featuredImage = {
+            data: post.featuredImage?.node?.localFile?.childImageSharp?.gatsbyImageData,
+            alt: post.featuredImage?.node?.alt || ``,
+          }
 
           return (
             <li key={post.uri}>
@@ -49,6 +54,14 @@ const BlogIndex = ({
                     </Link>
                   </h2>
                   <small>{post.date}</small>
+                  {/* if we have a featured image for this post let's display it */}
+                  {featuredImage?.data && (
+                    <GatsbyImage
+                      image={featuredImage.data}
+                      alt={featuredImage.alt}
+                      style={{ marginBottom: 50 }}
+                    />
+                  )}
                 </header>
                 <section itemProp="description">{parse(post.excerpt)}</section>
               </article>
@@ -78,11 +91,24 @@ export const pageQuery = graphql`
       skip: $offset
     ) {
       nodes {
-        excerpt
         uri
         date(formatString: "MMMM DD, YYYY")
         title
         excerpt
+        featuredImage {
+          node {
+            altText
+            localFile {
+              childImageSharp {
+                gatsbyImageData(
+                  quality: 100
+                  placeholder: TRACED_SVG
+                  layout: FULL_WIDTH
+                )
+              }
+            }
+          }
+        }
       }
     }
   }
