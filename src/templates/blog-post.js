@@ -87,7 +87,6 @@ export const pageQuery = graphql`
       content
       title
       date(formatString: "MMMM DD, YYYY")
-      }
     }
     previous: wpPost(id: { eq: $previousPostId }) {
       uri
